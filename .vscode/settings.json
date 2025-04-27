@@ -1,0 +1,7 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "delay.h": "c",
+        "imu.h": "c"
+    }
+}
