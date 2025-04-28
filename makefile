@@ -15,7 +15,7 @@
 # Specify the com port (windows) or USB port (macOS)
 # Use Device Manager to identify COM port number for Arduino Uno board in Windows
 # In Terminal, type ls /dev/tty.usb* to determine USB port number in macOS
-SERIALPORT = COM5
+SERIALPORT = COM7
 # Specify the name of your source code here:
 SOURCEFILE = measurements.c
 
@@ -31,8 +31,8 @@ main.hex: main.elf
 	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
 	avr-size --format=avr --mcu=atmega328p main.elf
 
-main.elf: $(SOURCEFILE) uart.c I2C.c
-	avr-gcc -Wall -Os -DF_CPU=$(CLOCKSPEED) -mmcu=atmega328p -o main.elf $(SOURCEFILE) uart.c I2C.c
+main.elf: $(SOURCEFILE) uart.c I2C.c imu.c
+	avr-gcc -Wall -Os -DF_CPU=$(CLOCKSPEED) -mmcu=atmega328p -o main.elf $(SOURCEFILE) uart.c I2C.c imu.c
 
 flash:	begin
 	avrdude -c $(PROGRAMMER) -b 115200 -P $(SERIALPORT) -p atmega328p -U flash:w:main.hex:i

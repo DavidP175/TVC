@@ -1,6 +1,9 @@
 #include "I2C.h"
 #include <avr/io.h>
 #define SCL_CLOCK 100000L
+//i2c library for atmega328p
+
+
 //initiates I2C
 //void i2cInit(void)
 void i2cInit(void){// call this in the main function before using the i2c methods below
