@@ -4,6 +4,9 @@
 #define accelReg 0x3b
 #define gyroReg
 
+#define alpha 0.6340686931 // alpha = 1- exp(-2pi*Fc/Fs) Fc = 40 Hz  Fs = 250 Hz
+double axf = 0, ayf = 0, azf = 0;
+
 //these are measure with load of 1 g so they will only be applied with significant 
 #define scaleFac 16384.0// scale factor for MPU9265 readings to g's
 
@@ -15,6 +18,8 @@
 
 #define xbias 0.2906 // offset in m/s^2 of mpu x axis
 #define xscale 0.9981684982 //multiply to normalize the scale of mpu x axis to 1 g
+
+inline void ema_update(double ax, double ay, double az);
 
 //TODO filter accel noise before sensor fusion?
 void getAccel(float *ax, float *ay, float *az){
@@ -44,10 +49,11 @@ void getAccel(float *ax, float *ay, float *az){
     else{
         azr -= 0.15;
     }
+    ema_update(axr,ayr,azr);//run filter on new values
     
-    *ax = axr;
-    *ay = ayr;
-    *az = azr;
+    *ax = axf;
+    *ay = ayf;
+    *az = azf;
 }
 /*
 void getGyro(float *gx, float *gy, float *gz){
@@ -59,3 +65,13 @@ void getGyro(float *gx, float *gy, float *gz){
     *gz = (float)((buf[4] << 8) | buf[5]);
 }
 */
+
+//exponential moving average filter
+inline void ema_update(double ax, double ay, double az){
+    //y[n] = alpha*x[n] + (1-alpha)*y[n-1]
+    //y[n] = y[n-1] + alpha*(x[n] - y[n-1])
+
+    axf += alpha*(ax - axf);
+    ayf += alpha*(ay - ayf);
+    azf += alpha*(az - azf);
+}
