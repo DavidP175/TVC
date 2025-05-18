@@ -31,8 +31,8 @@ main.hex: main.elf
 	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
 	avr-size --format=avr --mcu=atmega328p main.elf
 
-main.elf: $(SOURCEFILE) uart.c I2C.c imu.c
-	avr-gcc -Wall -Os -DF_CPU=$(CLOCKSPEED) -mmcu=atmega328p -o main.elf $(SOURCEFILE) uart.c I2C.c imu.c
+main.elf: $(SOURCEFILE) uart.c I2C.c imu.c timer.c
+	avr-gcc -Wall -Os -DF_CPU=$(CLOCKSPEED) -mmcu=atmega328p -o main.elf $(SOURCEFILE) uart.c I2C.c imu.c timer.c
 
 flash:	begin
 	avrdude -c $(PROGRAMMER) -b 115200 -P $(SERIALPORT) -p atmega328p -U flash:w:main.hex:i
