@@ -3,6 +3,7 @@
     "files.associations": {
         "delay.h": "c",
         "imu.h": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "timer.h": "c"
     }
 }
